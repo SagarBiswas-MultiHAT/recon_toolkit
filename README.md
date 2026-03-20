@@ -10,7 +10,6 @@
  &nbsp;
 ![Tests](https://img.shields.io/github/actions/workflow/status/SagarBiswas-MultiHAT/attack-surface-toolkit/ci.yml?branch=main&label=tests)
  &nbsp;
-![Coverage](https://img.shields.io/codecov/c/gh/SagarBiswas-MultiHAT/attack-surface-toolkit)
 
 </div>
 
