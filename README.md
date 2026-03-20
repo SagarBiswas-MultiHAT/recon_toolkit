@@ -63,7 +63,7 @@ recon_toolkit/
 ### Method A — Standard (venv)
 
 ```bash
-git clone https://github.com/<your-username>/recon_toolkit.git
+git clone https://github.com/SagarBiswas-MultiHAT/recon_toolkit.git
 cd recon_toolkit
 python -m venv venv
 source venv/bin/activate   # Windows: venv\Scripts\activate
