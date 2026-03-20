@@ -10,10 +10,6 @@
  &nbsp;
 ![Tests](https://img.shields.io/github/actions/workflow/status/SagarBiswas-MultiHAT/attack-surface-toolkit/ci.yml?branch=main&label=tests)
  &nbsp;
-![PyPI](https://img.shields.io/pypi/v/attack-surface-toolkit)
- &nbsp;
-![Docker Pulls](https://img.shields.io/docker/pulls/SagarBiswas-MultiHAT/attack-surface-toolkit)
- &nbsp;
 ![Coverage](https://img.shields.io/codecov/c/gh/SagarBiswas-MultiHAT/attack-surface-toolkit)
 
 </div>
