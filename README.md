@@ -1,6 +1,14 @@
 # recon_toolkit
 
-![Python 3.11](https://img.shields.io/badge/Python-3.11-blue) ![MIT License](https://img.shields.io/badge/License-MIT-green) ![CI Status](https://github.com/<your-username>/recon_toolkit/actions/workflows/ci.yml/badge.svg)
+<div align="right">
+
+![Python 3.11](https://img.shields.io/badge/Python-3.11-blue) 
+&nbsp;
+![MIT License](https://img.shields.io/badge/License-MIT-green) 
+&nbsp;
+![CI Status](https://github.com/<your-username>/recon_toolkit/actions/workflows/ci.yml/badge.svg)
+
+</div>
 
 A passive attack surface mapping and reconnaissance toolkit for authorized web security assessments.
 
