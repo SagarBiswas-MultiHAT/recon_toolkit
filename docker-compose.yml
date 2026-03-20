@@ -1,0 +1,7 @@
+services:
+  recon:
+    build: .
+    volumes:
+      - ./output:/app/output
+      - ./config.yaml:/app/config.yaml
+    command: [ "--domain", "example.com" ]

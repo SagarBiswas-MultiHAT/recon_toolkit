@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ result.tool_name }} - {{ result.domain }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --accent: #58a6ff;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --high: #ff4d4f;
+      --medium: #f39c12;
+      --low: #58a6ff;
+      --pass: #2ecc71;
+      --border: #30363d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: #0b1016;
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      overflow-y: auto;
+    }
+    nav h1 { font-size: 1rem; margin: 0 0 12px; }
+    nav a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 0;
+      font-size: 0.92rem;
+    }
+    nav a:hover { color: var(--accent); }
+    main { padding: 24px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    h2 { margin: 0 0 12px; color: #fff; }
+    h3 { margin: 12px 0 8px; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    .badge { border-radius: 999px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; display: inline-block; }
+    .HIGH { background: rgba(255,77,79,.15); color: var(--high); }
+    .MEDIUM { background: rgba(243,156,18,.15); color: var(--medium); }
+    .LOW { background: rgba(88,166,255,.15); color: var(--low); }
+    .PASS { background: rgba(46,204,113,.15); color: var(--pass); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      padding: 10px;
+      vertical-align: top;
+    }
+    th { color: #fff; cursor: pointer; }
+    .gauge-wrap { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; }
+    .gauge {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--accent) 0deg, #2d333b 0deg);
+      position: relative;
+      margin: auto;
+    }
+    .gauge::after {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+    .gauge-value {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; background: #0f141b; }
+    footer { color: var(--muted); font-size: 0.85rem; margin: 30px 0; }
+    @media print {
+      body { display: block; background: white; color: black; }
+      nav { display: none; }
+      .card { break-inside: avoid; border: 1px solid #ddd; }
+      th { color: black; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>Recon Report</h1>
+    <a href="#executive">1. Executive Summary</a>
+    <a href="#scope">2. Scope & Methodology</a>
+    <a href="#subdomains">3. Subdomains</a>
+    <a href="#dns">4. DNS Analysis</a>
+    <a href="#ssl">5. SSL/TLS</a>
+    <a href="#tech">6. Technology Stack</a>
+    <a href="#headers">7. Security Headers</a>
+    <a href="#surface">8. Attack Surface Map</a>
+    <a href="#wayback">9. Wayback Findings</a>
+    <a href="#risks">10. Risk Summary</a>
+    <a href="#recommendations">11. Recommendations</a>
+    <a href="#appendix">12. Appendix</a>
+  </nav>
+
+  <main>
+    <section id="executive" class="card">
+      <h2>Executive Summary</h2>
+      <p class="meta">{{ result.tool_name }} • Domain: <strong>{{ result.domain }}</strong> • Date: {{ result.timestamp }} • Version: {{ result.version }}</p>
+      <div class="gauge-wrap">
+        <div class="gauge" data-score="{{ result.exposure.score if result.exposure else 0 }}">
+          <div class="gauge-value">
+            <div style="font-size:1.8rem; font-weight:700">{{ result.exposure.score if result.exposure else 0 }}</div>
+            <div>/ 100</div>
+          </div>
+        </div>
+        <div>
+          <h3>{{ result.exposure.label if result.exposure else 'NOT SCORED' }}</h3>
+          {% if result.exposure %}
+          <ul>
+            <li>SSL Issues: {{ result.exposure.breakdown.ssl_issues }}/20</li>
+            <li>Missing Headers: {{ result.exposure.breakdown.missing_headers }}/20</li>
+            <li>DNS Issues: {{ result.exposure.breakdown.dns_issues }}/15</li>
+            <li>Admin Exposure: {{ result.exposure.breakdown.admin_exposure }}/15</li>
+          </ul>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <section id="scope" class="card">
+      <h2>Scope & Methodology</h2>
+      <p>Assessment method: passive, non-destructive reconnaissance only. No brute force, payload injection, or exploitation techniques were used.</p>
+      <ul>
+        <li>DNS, certificate transparency, archive intelligence, and metadata inspection</li>
+        <li>Homepage-depth surface extraction and header posture review</li>
+        <li>Historical URL triage and weighted exposure scoring</li>
+      </ul>
+    </section>
+
+    <section id="subdomains" class="card">
+      <h2>Subdomains</h2>
+      <table class="sortable">
+        <thead><tr><th>Name</th><th>Status</th><th>IP</th><th>CDN</th></tr></thead>
+        <tbody>
+        {% for item in result.subdomains %}
+          <tr><td>{{ item.name }}</td><td>{{ item.status }}</td><td>{{ item.ip or '-' }}</td><td>{{ item.cdn_provider or '-' }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section id="dns" class="card">
+      <h2>DNS Analysis</h2>
+      <h3>Records</h3>
+      <table class="sortable">
+        <thead><tr><th>Type</th><th>Values</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td>{{ result.dns.a | join(', ') }}</td></tr>
+          <tr><td>AAAA</td><td>{{ result.dns.aaaa | join(', ') }}</td></tr>
+          <tr><td>MX</td><td>{{ result.dns.mx | join(', ') }}</td></tr>
+          <tr><td>NS</td><td>{{ result.dns.ns | join(', ') }}</td></tr>
+          <tr><td>TXT</td><td>{{ result.dns.txt | join(', ') }}</td></tr>
+          <tr><td>CNAME</td><td>{{ result.dns.cname | join(', ') }}</td></tr>
+        </tbody>
+      </table>
+      <h3>Flags</h3>
+      <ul>
+        {% for finding in result.dns.flags %}
+          <li><span class="badge {{ finding.risk }}">{{ finding.risk }}</span> {{ finding.finding }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section id="ssl" class="card">
+      <h2>SSL/TLS</h2>
+      <p>Issuer: {{ result.ssl_tls.issuer or '-' }}</p>
+      <p>Expiry: {{ result.ssl_tls.not_after or '-' }} ({{ result.ssl_tls.days_remaining or '-' }} days)</p>
+      <p>TLS Version: {{ result.ssl_tls.tls_version or '-' }}</p>
+      <p>Wildcard: {{ 'Yes' if result.ssl_tls.wildcard_cert else 'No' }}</p>
+      <h3>Risk Flags</h3>
+      <ul>
+        {% for finding in result.ssl_tls.flags %}
+          <li><span class="badge {{ finding.risk }}">{{ finding.risk }}</span> {{ finding.finding }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section id="tech" class="card">
+      <h2>Technology Stack</h2>
+      <div class="chips">
+        {% for group in [result.tech.web_server, result.tech.runtime, result.tech.frameworks, result.tech.cms, result.tech.frontend, result.tech.analytics, result.tech.cdn_waf] %}
+          {% for item in group %}
+            <span class="chip">{{ item }}</span>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </section>
+
+    <section id="headers" class="card">
+      <h2>Security Headers</h2>
+      {% set security_header_keys = [
+        'content-security-policy',
+        'content-security-policy-report-only',
+        'strict-transport-security',
+        'x-frame-options',
+        'x-content-type-options',
+        'referrer-policy',
+        'permissions-policy',
+        'x-xss-protection',
+        'access-control-allow-origin',
+        'cross-origin-opener-policy'
+      ] %}
+      <table class="sortable">
+        <thead><tr><th>Header</th><th>Value</th></tr></thead>
+        <tbody>
+          {% for key, value in result.headers.headers.items() %}
+          {% if key | lower in security_header_keys %}
+          <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+      <h3>Findings</h3>
+      <ul>
+        {% for finding in result.headers.findings %}
+          <li><span class="badge {{ finding.risk }}">{{ finding.risk }}</span> {{ finding.finding }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section id="surface" class="card">
+      <h2>Attack Surface Map</h2>
+      <p>Internal links: {{ result.surface.internal_links | length }} | External links: {{ result.surface.external_links | length }}</p>
+      <p>Forms: {{ result.surface.forms | length }} | Scripts: {{ result.surface.scripts | length }}</p>
+      <p>API-like routes: {{ result.surface.api_routes | join(", ") or "None detected" }}</p>
+      <p>Admin paths: {{ result.surface.admin_paths | join(", ") or "None detected" }}</p>
+    </section>
+
+    <section id="wayback" class="card">
+      <h2>Wayback Findings</h2>
+      <table class="sortable">
+        <thead><tr><th>Historical URL</th><th>Risk</th></tr></thead>
+        <tbody>
+          {% for url in result.wayback.urls %}
+          {% set risk = 'HIGH' if url in result.wayback.risky_urls else 'LOW' %}
+          <tr><td>{{ url }}</td><td><span class="badge {{ risk }}">{{ risk }}</span></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section id="risks" class="card">
+      <h2>Risk Summary</h2>
+      <table class="sortable">
+        <thead><tr><th>ID</th><th>Category</th><th>Risk</th><th>Finding</th><th>Impact</th></tr></thead>
+        <tbody>
+          {% if result.exposure %}
+            {% for finding in result.exposure.findings %}
+            <tr>
+              <td>{{ finding.id }}</td>
+              <td>{{ finding.category }}</td>
+              <td><span class="badge {{ finding.risk }}">{{ finding.risk }}</span></td>
+              <td>{{ finding.finding }}</td>
+              <td>{{ finding.score_impact }}</td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+    </section>
+
+    <section id="recommendations" class="card">
+      <h2>Recommendations</h2>
+      <ol>
+        {% if result.exposure %}
+          {% for finding in result.exposure.findings %}
+            <li><strong>{{ finding.id }}</strong> — {{ finding.recommendation }}</li>
+          {% endfor %}
+        {% endif %}
+      </ol>
+    </section>
+
+    <section id="appendix" class="card">
+      <h2>Appendix</h2>
+      <p>Raw Subdomains: {{ result.subdomains | length }}</p>
+      <p>Raw DNS A Records: {{ result.dns.a | join(', ') }}</p>
+      <p>Historical Subdomains: {{ result.wayback.historical_subdomains | join(', ') }}</p>
+      <h3>Non-Security Headers</h3>
+      <table class="sortable">
+        <thead><tr><th>Header</th><th>Value</th></tr></thead>
+        <tbody>
+          {% for key, value in result.headers.headers.items() %}
+          {% if key | lower not in security_header_keys %}
+          <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      This report was generated passively for educational/authorized assessment purposes only.
+    </footer>
+  </main>
+
+  <script>
+    const gauge = document.querySelector('.gauge');
+    if (gauge) {
+      const score = Number(gauge.dataset.score || 0);
+      const maxDeg = Math.max(0, Math.min(360, Math.round((score / 100) * 360)));
+      let current = 0;
+      const animate = () => {
+        current += 6;
+        if (current >= maxDeg) current = maxDeg;
+        gauge.style.background = `conic-gradient(var(--accent) ${current}deg, #2d333b ${current}deg)`;
+        if (current < maxDeg) requestAnimationFrame(animate);
+      };
+      requestAnimationFrame(animate);
+    }
+
+    document.querySelectorAll('table.sortable th').forEach((header, index) => {
+      header.addEventListener('click', () => {
+        const table = header.closest('table');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        const asc = header.dataset.asc !== 'true';
+        rows.sort((a, b) => {
+          const av = a.children[index]?.innerText?.trim() || '';
+          const bv = b.children[index]?.innerText?.trim() || '';
+          return asc ? av.localeCompare(bv, undefined, { numeric: true }) : bv.localeCompare(av, undefined, { numeric: true });
+        });
+        header.dataset.asc = asc;
+        rows.forEach((row) => tbody.appendChild(row));
+      });
+    });
+  </script>
+</body>
+</html>

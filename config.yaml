@@ -1,0 +1,26 @@
+general:
+  output_dir: ./output
+  log_level: INFO
+  request_timeout: 10
+  max_concurrent_requests: 5
+
+api_keys:
+  securitytrails: ""
+  shodan: ""
+  virustotal: ""
+
+modules:
+  subdomain_enum: true
+  dns_analysis: true
+  whois_asn: true
+  ssl_tls: true
+  tech_detection: true
+  header_audit: true
+  surface_mapper: true
+  wayback: true
+  attack_graph: true
+
+rate_limits:
+  crtsh_delay: 1.0
+  wayback_delay: 0.5
+  dns_concurrent: 10
