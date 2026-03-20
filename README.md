@@ -1,4 +1,4 @@
-# recon_toolkit
+# attack-surface-toolkit
 
 <div align="right">
 
@@ -6,7 +6,7 @@
 &nbsp;
 ![MIT License](https://img.shields.io/badge/License-MIT-green) 
 &nbsp;
-![CI Status](https://github.com/<your-username>/recon_toolkit/actions/workflows/ci.yml/badge.svg)
+![CI Status](https://github.com/SagarBiswas-MultiHAT/attack-surface-toolkit/actions/workflows/ci.yml/badge.svg)
 
 </div>
 
@@ -47,7 +47,7 @@ Each run creates a timestamped folder under output with four deliverables.
 ## Architecture
 
 ```text
-recon_toolkit/
+attack-surface-toolkit/
 ├── core/          → config, logging, rate limiting, models
 ├── modules/       → all recon modules
 ├── reporting/     → HTML, JSON, Markdown generators
@@ -63,8 +63,8 @@ recon_toolkit/
 ### Method A — Standard (venv)
 
 ```bash
-git clone https://github.com/SagarBiswas-MultiHAT/recon_toolkit.git
-cd recon_toolkit
+git clone https://github.com/SagarBiswas-MultiHAT/attack-surface-toolkit.git
+cd attack-surface-toolkit
 python -m venv venv
 source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -73,8 +73,8 @@ pip install -r requirements.txt
 ### Method B — Docker
 
 ```bash
-docker build -t recon_toolkit .
-docker run -v $(pwd)/output:/app/output recon_toolkit \
+docker build -t attack-surface-toolkit .
+docker run -v $(pwd)/output:/app/output attack-surface-toolkit \
     --domain example.com
 ```
 
