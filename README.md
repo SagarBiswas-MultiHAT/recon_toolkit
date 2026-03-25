@@ -7,9 +7,9 @@
 ![MIT License](https://img.shields.io/badge/License-MIT-green) 
 &nbsp;
 ![CI Status](https://github.com/SagarBiswas-MultiHAT/attack-surface-toolkit/actions/workflows/ci.yml/badge.svg)
- &nbsp;
+&nbsp;
 ![Tests](https://img.shields.io/github/actions/workflow/status/SagarBiswas-MultiHAT/attack-surface-toolkit/ci.yml?branch=main&label=tests)
- &nbsp;
+&nbsp;
 
 </div>
 
