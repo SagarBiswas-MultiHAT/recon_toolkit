@@ -17,6 +17,30 @@ A passive attack surface mapping and reconnaissance toolkit for authorized web s
 
 ---
 
+### Pictures
+
+<details>
+
+<summary>Click to expand</summary>
+
+<div align="center">
+
+![CLI Interface](PICs/CLI.png)
+
+![Attack Surface Graph](PICs/attack_surface_graph_all_notes-html.png)
+
+![Attach Surface Graph - Zoomed](PICs/attack_surface_graph_zoom-html.png)
+
+![Report](PICs/report-html.png)
+
+![Project Structure](PICs/project_structure_and_output_folder.png)
+
+</div>
+
+--- 
+
+</details>
+
 ### Live Outputs: 
 
 - [google.com | attack_surface_graph.html](https://sagarbiswas-multihat.github.io/attack-surface-toolkit/output/google.com_2026-03-20_05-47-56/attack_surface_graph.html)
